@@ -111,17 +111,26 @@ contactForm.addEventListener('submit', async (event) => {
       },
       body: JSON.stringify(formData),
     });
-    const result = await response.json();
+    const responseText = await response.text();
+    let result = {};
 
-    if (!response.ok || result.success === false) {
-      throw new Error('Message delivery failed.');
+    try {
+      result = JSON.parse(responseText);
+    } catch {
+      // FormSubmit can occasionally return an HTML error page instead of JSON.
+    }
+
+    if (!response.ok || String(result.success).toLowerCase() === 'false') {
+      throw new Error(result.message || `FormSubmit returned an error (${response.status}).`);
     }
 
     contactForm.reset();
     status.textContent = 'Message sent! Thank you—I’ll get back to you soon.';
   } catch (error) {
     status.classList.add('error');
-    status.textContent = 'Sorry, your message could not be sent. Please email me directly instead.';
+    status.textContent = error instanceof TypeError
+      ? 'FormSubmit could not be reached. Check your connection or email me directly.'
+      : error.message;
   } finally {
     submitButton.disabled = false;
   }

@@ -3,6 +3,8 @@ const navToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const navLinks = [...document.querySelectorAll('.nav-menu a[href^="#"]')];
 const sections = [...document.querySelectorAll('main section[id]')];
+const backTopButton = document.querySelector('.back-top');
+const contactForm = document.querySelector('#contact-form');
 
 const closeMenu = () => {
   navMenu.classList.remove('open');
@@ -17,6 +19,12 @@ navToggle.addEventListener('click', () => {
 });
 
 navLinks.forEach((link) => link.addEventListener('click', closeMenu));
+
+backTopButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+});
 
 window.addEventListener('scroll', () => {
   header.classList.toggle('scrolled', window.scrollY > 18);
@@ -84,10 +92,39 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
   });
 });
 
-document.querySelector('#contact-form').addEventListener('submit', (event) => {
+contactForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  const status = event.currentTarget.querySelector('.form-status');
-  status.textContent = 'Template mode: we’ll connect this form when your details are ready!';
+  const status = contactForm.querySelector('.form-status');
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  const formData = Object.fromEntries(new FormData(contactForm));
+
+  status.classList.remove('error');
+  status.textContent = 'Sending your message...';
+  submitButton.disabled = true;
+
+  try {
+    const response = await fetch('https://formsubmit.co/ajax/cospanol21@gmail.com', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    const result = await response.json();
+
+    if (!response.ok || result.success === false) {
+      throw new Error('Message delivery failed.');
+    }
+
+    contactForm.reset();
+    status.textContent = 'Message sent! Thank you—I’ll get back to you soon.';
+  } catch (error) {
+    status.classList.add('error');
+    status.textContent = 'Sorry, your message could not be sent. Please email me directly instead.';
+  } finally {
+    submitButton.disabled = false;
+  }
 });
 
 document.querySelector('#year').textContent = new Date().getFullYear();

@@ -4,7 +4,6 @@ const navMenu = document.querySelector('.nav-menu');
 const navLinks = [...document.querySelectorAll('.nav-menu a[href^="#"]')];
 const sections = [...document.querySelectorAll('main section[id]')];
 const backTopButton = document.querySelector('.back-top');
-const contactForm = document.querySelector('#contact-form');
 
 const closeMenu = () => {
   navMenu.classList.remove('open');
@@ -90,50 +89,6 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
     image.addEventListener('error', markMissing);
     if (image.complete && image.naturalWidth === 0) markMissing();
   });
-});
-
-contactForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const status = contactForm.querySelector('.form-status');
-  const submitButton = contactForm.querySelector('button[type="submit"]');
-  const formData = Object.fromEntries(new FormData(contactForm));
-
-  status.classList.remove('error');
-  status.textContent = 'Sending your message...';
-  submitButton.disabled = true;
-
-  try {
-    const response = await fetch('https://formsubmit.co/ajax/cospanol21@gmail.com', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-    const responseText = await response.text();
-    let result = {};
-
-    try {
-      result = JSON.parse(responseText);
-    } catch {
-      // FormSubmit can occasionally return an HTML error page instead of JSON.
-    }
-
-    if (!response.ok || String(result.success).toLowerCase() === 'false') {
-      throw new Error(result.message || `FormSubmit returned an error (${response.status}).`);
-    }
-
-    contactForm.reset();
-    status.textContent = 'Message sent! Thank you—I’ll get back to you soon.';
-  } catch (error) {
-    status.classList.add('error');
-    status.textContent = error instanceof TypeError
-      ? 'FormSubmit could not be reached. Check your connection or email me directly.'
-      : error.message;
-  } finally {
-    submitButton.disabled = false;
-  }
 });
 
 document.querySelector('#year').textContent = new Date().getFullYear();

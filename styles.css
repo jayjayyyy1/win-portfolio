@@ -82,10 +82,9 @@ h3 { line-height: 1.25; }
 .hero-visual::before { content: ""; position: absolute; width: 390px; height: 390px; border-radius: 50%; background: linear-gradient(135deg, rgba(54,167,255,.4), rgba(255,82,111,.28)); filter: blur(50px); opacity: .65; }
 .glass-card { border: 1px solid rgba(255,255,255,.14); background: linear-gradient(145deg, rgba(25,34,70,.78), rgba(9,13,32,.78)); box-shadow: var(--shadow); backdrop-filter: blur(16px); }
 .profile-card { position: relative; z-index: 2; width: min(100%, 410px); padding: 18px; border-radius: 28px; transform: rotate(2deg); }
-.profile-placeholder { position: relative; height: 390px; overflow: hidden; border-radius: 20px; background: radial-gradient(circle at 50% 34%, #263d67, #0c1329 56%, #070a15); }
-.profile-placeholder::after { content: "YOUR PHOTO"; position: absolute; inset: auto 0 23px; color: rgba(255,255,255,.28); text-align: center; font-size: .67rem; font-weight: 800; letter-spacing: .2em; }
-.avatar-head { position: absolute; left: 50%; top: 78px; width: 112px; height: 130px; border-radius: 48% 48% 42% 42%; transform: translateX(-50%); background: linear-gradient(145deg, #4c628b, #1a2846); box-shadow: inset -14px -8px 25px rgba(0,0,0,.24); }
-.avatar-body { position: absolute; left: 50%; bottom: -70px; width: 285px; height: 245px; border-radius: 48% 48% 0 0; transform: translateX(-50%); background: linear-gradient(125deg, #2f5591, #161d39 60%); }
+.profile-placeholder { position: relative; height: 430px; overflow: hidden; border-radius: 20px; background: #e8e6e9; }
+.profile-placeholder::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgba(6,10,25,.32), transparent 38%); }
+.profile-photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 32%; filter: saturate(.94) contrast(1.02); }
 .code-chip { position: absolute; z-index: 3; display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid rgba(255,255,255,.18); border-radius: 15px; color: white; font-size: .68rem; font-weight: 800; background: rgba(12,18,42,.72); box-shadow: 0 12px 28px rgba(0,0,0,.25); }
 .chip-html { top: 65px; left: 28px; color: var(--coral); transform: rotate(-8deg); }
 .chip-css { right: 24px; top: 125px; color: var(--blue); transform: rotate(8deg); }
